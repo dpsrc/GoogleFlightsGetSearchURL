@@ -41,19 +41,24 @@ def fillin_search_flights_info(page, from_to_airports: tuple[str, str], date_sta
         # enter departure date
         page.click('//input[@placeholder="Departure"]')
         ###page.wait_for_timeout(2000)
+        page.keyboard.press('Control+A')
         page.keyboard.type(date_start.strftime('%b %d, %Y'))
+
+        page.keyboard.press('Tab')
 
         # set return date if round trip
         if trip_type == TripTypes.ROUND_TRIP:
             page.click('(//input[@placeholder="Return"])[2]')
             page.keyboard.press('Control+A')
             ###page.wait_for_timeout(2000)
-            page.keyboard.type(date_start.strftime('%b %d, %Y'))
+            page.keyboard.type(date_return.strftime('%b %d, %Y'))
         
         # click search button
         for _ in range(5):
             ###page.wait_for_timeout(300)
             page.keyboard.press('Enter')
+
+        #page.wait_for_timeout(3000)
 
         success, msg = True, page.url
     except:
@@ -78,9 +83,12 @@ def main(page, from_to_airports_combination, date_start_str, date_return_str):
 
 if __name__ == '__main__':
     with sync_playwright() as p:
+        # To launch an invisible browser, use headless=True
         browser = p.firefox.launch(headless=False, slow_mo=50)
         page = browser.new_page()
-        from_to_airports_combination=("DEN", "JFK")
+        # Currently only one airport code is supported for departure and destination (like "NYC" but not "JFK,LGA").
+        # TODO: Support multiple aitport codes for departure and destination.
+        from_to_airports_combination=("DEN", "NYC")
         print('from_to_airports_combination=', from_to_airports_combination)
-        main(page, from_to_airports_combination, '2023/2/11', ' 2023/3/8		')
+        main(page, from_to_airports_combination, '2023/2/11', '2023/3/8')
     print('Job done')
