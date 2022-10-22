@@ -67,25 +67,30 @@ def fillin_search_flights_info(page, from_to_airports: tuple[str, str], date_sta
 
 # TODO - get the field values from the page and compare to intended ones
 def verify_search_url():
-    print('TODO')
+    print('TODO verify_search_url()')
+
+def create_browser_page() -> str:
+    # To launch an invisible browser, use headless=True
+    browser = p.firefox.launch(headless=False, slow_mo=50)
+    page = browser.new_page()
+    return page
 
 def main(page, from_to_airports_combination, date_start_str, date_return_str):
     success, url = fillin_search_flights_info(page, from_to_airports_combination, date_start_str, date_return_str)
     ###page.wait_for_timeout(5000)
     if (success):
         print('url = ', url)
+        print('pageurl = ', page.url)
     else:
         print('Error: ', url)
     verify_search_url()
 
 if __name__ == '__main__':
     with sync_playwright() as p:
-        # To launch an invisible browser, use headless=True
-        browser = p.firefox.launch(headless=False, slow_mo=50)
-        page = browser.new_page()
+        page = create_browser_page()
         # Currently only one airport code is supported for departure and destination (like "NYC" but not "JFK,LGA").
         # TODO: Support multiple airport codes for departure and destination.
         from_to_airports_combination=("DEN", "NYC")
         print('from_to_airports_combination=', from_to_airports_combination)
-        main(page, from_to_airports_combination, '  2023/2/11        ', ' 2023/3/8     ')
+        main(page, from_to_airports_combination, '  2023/7/4        ', ' 2023/8/24     ')
     print('Job done')
