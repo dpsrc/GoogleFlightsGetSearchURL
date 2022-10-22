@@ -9,7 +9,7 @@ from tripTypes import TripTypes
 def fillin_search_flights_info(page, from_to_airports: tuple[str, str], date_start_str, date_return_str) -> (bool, str):
     try:
         airport_from, airport_to = from_to_airports
-        date_start = datetime.datetime.strptime(date_start_str, "%Y/%m/%d")
+        date_start = datetime.datetime.strptime(date_start_str.strip(), "%Y/%m/%d")
         print('date_start=', date_start, date_start.strftime('%b %d, %Y'))
         if date_return_str and date_return_str.strip() != '':
             trip_type = TripTypes.ROUND_TRIP
@@ -44,10 +44,9 @@ def fillin_search_flights_info(page, from_to_airports: tuple[str, str], date_sta
         page.keyboard.press('Control+A')
         page.keyboard.type(date_start.strftime('%b %d, %Y'))
 
-        page.keyboard.press('Tab')
-
         # set return date if round trip
         if trip_type == TripTypes.ROUND_TRIP:
+            page.keyboard.press('Tab')
             page.click('(//input[@placeholder="Return"])[2]')
             page.keyboard.press('Control+A')
             ###page.wait_for_timeout(2000)
@@ -57,8 +56,6 @@ def fillin_search_flights_info(page, from_to_airports: tuple[str, str], date_sta
         for _ in range(5):
             ###page.wait_for_timeout(300)
             page.keyboard.press('Enter')
-
-        #page.wait_for_timeout(3000)
 
         success, msg = True, page.url
     except:
@@ -87,8 +84,8 @@ if __name__ == '__main__':
         browser = p.firefox.launch(headless=False, slow_mo=50)
         page = browser.new_page()
         # Currently only one airport code is supported for departure and destination (like "NYC" but not "JFK,LGA").
-        # TODO: Support multiple aitport codes for departure and destination.
+        # TODO: Support multiple airport codes for departure and destination.
         from_to_airports_combination=("DEN", "NYC")
         print('from_to_airports_combination=', from_to_airports_combination)
-        main(page, from_to_airports_combination, '2023/2/11', '2023/3/8')
+        main(page, from_to_airports_combination, '  2023/2/11        ', ' 2023/3/8     ')
     print('Job done')
