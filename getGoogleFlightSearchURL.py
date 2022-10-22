@@ -39,13 +39,13 @@ def fillin_search_flights_info(page, from_to_airports: tuple[str, str], date_sta
         ###page.wait_for_timeout(1000)
 
         # enter departure date
-        page.click('//input[@placeholder="Departure date"]')
+        page.click('//input[@placeholder="Departure"]')
         ###page.wait_for_timeout(2000)
         page.keyboard.type(date_start.strftime('%b %d, %Y'))
 
         # set return date if round trip
         if trip_type == TripTypes.ROUND_TRIP:
-            page.click('(//input[@placeholder="Return date"])[2]')
+            page.click('(//input[@placeholder="Return"])[2]')
             page.keyboard.press('Control+A')
             ###page.wait_for_timeout(2000)
             page.keyboard.type(date_start.strftime('%b %d, %Y'))
