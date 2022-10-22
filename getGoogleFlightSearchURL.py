@@ -56,6 +56,22 @@ def fillin_search_flights_info(page, from_to_airports: tuple[str, str], date_sta
         for _ in range(5):
             ###page.wait_for_timeout(300)
             page.keyboard.press('Enter')
+            
+        page.wait_for_timeout(3000)
+        element = page.query_selector("li.pIav2d") # 'JMc5Xc') # pIav2d
+        print('elelemt = ', element)
+        
+        elements = page.query_selector_all("div.mxvQLc") # div.gQ6yfe") # "div.yR1fYc") # "div.JMc5Xc")
+        print('elelemts = ', elements)
+        print('len(elements) = ', len(elements))
+        
+        #parent = element.querySelector('xpath=..')
+        #grandparent = element.querySelector('xpath=../..')
+        #siblings = element.querySelectorAll('xpath=following-sibling::*')
+        #children = element.querySelectorAll('xpath=child::*')
+        
+        for el in elements:
+            print(el, '===================================', el.inner_html())
 
         success, msg = True, page.url
     except:
@@ -92,5 +108,5 @@ if __name__ == '__main__':
         # TODO: Support multiple airport codes for departure and destination.
         from_to_airports_combination=("DEN", "NYC")
         print('from_to_airports_combination=', from_to_airports_combination)
-        main(page, from_to_airports_combination, '  2023/7/4        ', ' 2023/8/24     ')
+        main(page, from_to_airports_combination, '  2023/7/4        ', '') # , ' 2023/8/24     ')
     print('Job done')
